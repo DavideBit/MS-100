@@ -24,6 +24,7 @@ New-AzureADUser -AccountEnabled $true -DisplayName "Holly Dickson" -GivenName "H
 Write-Host "`nCreazione utente Holly Dickson completata`n" -ForegroundColor DarkGreen
 
 # Assegnazione del ruolo Gloabl Admin ad Holly
-$GlobalAdminRole = Get-AzureADDirectoryRoleTemplate | Where-Object {$_.DisplayName -eq "Global Administrator"}
-Enable-AzureADDirectoryRole -RoleTemplateId $GlobalAdminRole.ObjectId
+$globalAdminRoleObjectId = (Get-AzureADDirectoryRole | Where-Object {$_.DisplayName -eq "Global Administrator"}).ObjectId
+$hollyObjectId = (Get-AzureADUser -filter {DisplayName -eq "Holly Dickson"}).ObjectId
+Add-AzureADDirectoryRoleMember -ObjectID $globalAdminRoleObjectId -RefObjectId $hollyObjectId
 Write-Host "`nAssengazione ad Holly Global Admin completata`n" -ForegroundColor DarkGreen
