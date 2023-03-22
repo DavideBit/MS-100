@@ -1,15 +1,26 @@
 # Credenziali amministazione principale
-
+<#
 $domainName = "xxx"
 # Attenzione: $modAdminName deve essere nella forma "domain\user"
 $modAdminName = "admin\$domainName"
 $modAdminPassword = "xxx"
 
 $modCredentials = New-Object System.Management.Automation.PSCredential $modAdminName,$modAdminPassword
+#>
 
-# Installazione e connessione ad AzureAD
-Install-Module AzureAD -Credential $modCredentials
-Connect-AzureAD -Credential $modCredentials
+
+Write-Host "Trust repository PSGallery"
+Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+Write-Host "Trust repository PSGallery" -ForegroundColor Green
+
+Write-Host "Installazione AzureAD"
+Install-Module AzureAD
+Write-Host "Installazione AzureAD" -ForegroundColor Green
+
+Write-Host "Connessione ad AzureAD"
+$modAdminCred = Get-Credential
+Connect-AzureAD -Credential $modAdminCred
+Write-Host "Connessione ad AzureAD" -ForegroundColor Green
 
 # Creazione utente Holly Dickson
 
