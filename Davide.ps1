@@ -1,10 +1,4 @@
-<#
-Risorse:
-https://github.com/MicrosoftLearning/MS-100T00-Microsoft-365-Identity-and-Services/tree/master/Instructions/Labs
-#>
-
-Write-Host "`nInizio`n"
-
+Write-Host "`nInizio`n" -ForegroundColor Green
 
 # Trust repository PSGallery
 Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
@@ -36,3 +30,5 @@ $globalAdminRoleObjectId = (Get-AzureADDirectoryRole | Where-Object {$_.DisplayN
 $hollyObjectId = (Get-AzureADUser -ObjectID "Holly@$domainName").ObjectId
 Add-AzureADDirectoryRoleMember -ObjectID $globalAdminRoleObjectId -RefObjectId $hollyObjectId
 Write-Host "`nAssengazione ad Holly Global Admin completata`n" -ForegroundColor Green
+
+Write-Host "`nFinito`n" -ForegroundColor Green
