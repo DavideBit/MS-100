@@ -1,15 +1,23 @@
+<#
+Risorse:
+https://github.com/MicrosoftLearning/MS-100T00-Microsoft-365-Identity-and-Services/tree/master/Instructions/Labs
+#>
+
+Write-Host "`nInizio`n"
+
+
 # Trust repository PSGallery
 Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
-Write-Host "`nTrust repository PSGallery completato`n" -ForegroundColor DarkGreen
+Write-Host "`nTrust repository PSGallery completato`n" -ForegroundColor Green
 
 # Installazione AzureAD
 Install-Module AzureAD
-Write-Host "`nInstallazione AzureAD completata`n" -ForegroundColor DarkGreen
+Write-Host "`nInstallazione AzureAD completata`n" -ForegroundColor Green
 
 # Connessione ad AzureAD
 $modAdminCred = Get-Credential
 Connect-AzureAD -Credential $modAdminCred
-Write-Host "`nConnessione ad AzureAD completata`n" -ForegroundColor DarkGreen
+Write-Host "`nConnessione ad AzureAD completata`n" -ForegroundColor Green
 
 # Definizione del dominio
 $domainName = $modAdminCred.username -replace ".*@"
@@ -21,10 +29,10 @@ $hollyPasswordProfile.ForceChangePasswordNextLogin = $false
 
 # Creazione utente Holly Dickson
 New-AzureADUser -AccountEnabled $true -DisplayName "Holly Dickson" -GivenName "Holly" -Surname "Dickson" -UserPrincipalName "Holly@$domainName" -PasswordProfile $hollyPasswordProfile -mailNickName "Holly"
-Write-Host "`nCreazione utente Holly Dickson completata`n" -ForegroundColor DarkGreen
+Write-Host "`nCreazione utente Holly Dickson completata`n" -ForegroundColor Green
 
 # Assegnazione del ruolo Gloabl Admin ad Holly
 $globalAdminRoleObjectId = (Get-AzureADDirectoryRole | Where-Object {$_.DisplayName -eq "Global Administrator"}).ObjectId
-$hollyObjectId = (Get-AzureADUser -filter {DisplayName -eq "Holly Dickson"}).ObjectId
+$hollyObjectId = (Get-AzureADUser -ObjectID "Holly@$domainName").ObjectId
 Add-AzureADDirectoryRoleMember -ObjectID $globalAdminRoleObjectId -RefObjectId $hollyObjectId
-Write-Host "`nAssengazione ad Holly Global Admin completata`n" -ForegroundColor DarkGreen
+Write-Host "`nAssengazione ad Holly Global Admin completata`n" -ForegroundColor Green
