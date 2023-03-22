@@ -23,3 +23,7 @@ $hollyPasswordProfile.ForceChangePasswordNextLogin = $false
 New-AzureADUser -AccountEnabled $true -DisplayName "Holly Dickson" -GivenName "Holly" -Surname "Dickson" -UserPrincipalName "Holly@$domainName" -PasswordProfile $hollyPasswordProfile -mailNickName "Holly"
 Write-Host "`nCreazione utente Holly Dickson completata`n" -ForegroundColor DarkGreen
 
+# Assegnazione del ruolo Gloabl Admin ad Holly
+$GlobalAdminRole = Get-AzureADDirectoryRoleTemplate | Where-Object {$_.DisplayName -eq "Global Administrator"}
+Enable-AzureADDirectoryRole -RoleTemplateId $GlobalAdminRole.ObjectId
+Write-Host "`nAssengazione ad Holly Global Admin completata`n" -ForegroundColor DarkGreen
