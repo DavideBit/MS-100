@@ -1,35 +1,25 @@
-# Credenziali amministazione principale
-<#
-$domainName = "xxx"
-# Attenzione: $modAdminName deve essere nella forma "domain\user"
-$modAdminName = "admin\$domainName"
-$modAdminPassword = "xxx"
-
-$modCredentials = New-Object System.Management.Automation.PSCredential $modAdminName,$modAdminPassword
-#>
-
-
-Write-Host "Trust repository PSGallery"
+# Trust repository PSGallery
 Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
-Write-Host "Trust repository PSGallery" -ForegroundColor Green
+Write-Host "`nTrust repository PSGallery completato`n" -ForegroundColor DarkGreen
 
-Write-Host "Installazione AzureAD"
+# Installazione AzureAD
 Install-Module AzureAD
-Write-Host "Installazione AzureAD" -ForegroundColor Green
+Write-Host "`nInstallazione AzureAD completata`n" -ForegroundColor DarkGreen
 
-Write-Host "Connessione ad AzureAD"
+# Connessione ad AzureAD
 $modAdminCred = Get-Credential
 Connect-AzureAD -Credential $modAdminCred
-Write-Host "Connessione ad AzureAD" -ForegroundColor Green
+Write-Host "`nConnessione ad AzureAD completata`n" -ForegroundColor DarkGreen
+
+# Definizione del dominio
+$domainName = $modAdminCred.username -replace ".*@"
+
+# Preparazione della password per creazione account Holly Dickson
+$hollyPasswordProfile = New-Object -TypeName Microsoft.Open.AzureAD.Model.PasswordProfile
+$hollyPasswordProfile.Password = "User.pw1"
+$hollyPasswordProfile.ForceChangePasswordNextLogin = $false
 
 # Creazione utente Holly Dickson
+New-AzureADUser -AccountEnabled $true -DisplayName "Holly Dickson" -GivenName "Holly" -Surname "Dickson" -UserPrincipalName "Holly@$domainName" -PasswordProfile $hollyPasswordProfile -mailNickName "Holly"
+Write-Host "`nCreazione utente Holly Dickson completata`n" -ForegroundColor DarkGreen
 
-$hollyPasswordProfile = New-Object -TypeName Microsoft.Open.AzureAD.Model.PasswordProfile
-# Attenzione: inserire qui la password di Holly Dickson
-$hollyPasswordProfile.Password = "User.pw1"
-
-New-AzureADUser -DisplayName "Holly Dickson" -GivenName "Holly" -Surname "Dickson" -UserPrincipalName "Holly@$domainName" -PasswordProfile $hollyPasswordProfile
-# Da finire in modo che non venga cambiata la password.
-#Risorse: 
-#https://learn.microsoft.com/en-us/powershell/module/azuread/new-azureaduser?view=azureadps-2.0
-#https://howardsimpson.blogspot.com/2021/10/enforcechangepasswordpolicy-in-new-azureaduser-and-set-azureaduserpassword.html
