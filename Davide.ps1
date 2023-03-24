@@ -39,11 +39,13 @@ Write-Host "OK" -ForegroundColor Green
 
 # Assegnazione delle licenze ad Holly
 Write-Host "`nAssegnazione delle licenze ad Holly..." -NoNewline
-$planName= @("EMSPREMIUM","ENTERPRISEPREMIUM")
+$planNames= @("EMSPREMIUM","ENTERPRISEPREMIUM")
 $License = New-Object -TypeName Microsoft.Open.AzureAD.Model.AssignedLicense
-$License.SkuId = (Get-AzureADSubscribedSku | Where-Object -Property SkuPartNumber -Value $planName -EQ).SkuID
-$LicensesToAssign = New-Object -TypeName Microsoft.Open.AzureAD.Model.AssignedLicenses
-$LicensesToAssign.AddLicenses = $License
+foreach ($plan in $planNames) {
+    $License.SkuId = (Get-AzureADSubscribedSku | Where-Object -Property SkuPartNumber -Value $plan -EQ).SkuID
+    $LicensesToAssign = New-Object -TypeName Microsoft.Open.AzureAD.Model.AssignedLicenses
+    $LicensesToAssign.AddLicenses = $License
+}
 Set-AzureADUserLicense -ObjectId $hollyObjectId -AssignedLicenses $LicensesToAssign
 Write-Host "OK" -ForegroundColor Green
 
