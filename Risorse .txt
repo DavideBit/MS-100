@@ -3,3 +3,9 @@ https://github.com/MicrosoftLearning/MS-100T00-Microsoft-365-Identity-and-Servic
 
 New-AzureADUser
 https://learn.microsoft.com/en-us/powershell/module/azuread/new-azureaduser?view=azureadps-2.0
+
+Assegnazione licenze
+https://learn.microsoft.com/en-us/microsoft-365/enterprise/assign-licenses-to-user-accounts-with-microsoft-365-powershell?view=o365-worldwide
+
+Product names and service plan identifiers for licensing
+https://learn.microsoft.com/en-us/azure/active-directory/enterprise-users/licensing-service-plan-reference
