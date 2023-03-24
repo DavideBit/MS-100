@@ -1,2 +1,5 @@
 Github lezioni Microsoft
 https://github.com/MicrosoftLearning/MS-100T00-Microsoft-365-Identity-and-Services/tree/master/Instructions/Labs
+
+New-AzureADUser
+https://learn.microsoft.com/en-us/powershell/module/azuread/new-azureaduser?view=azureadps-2.0
