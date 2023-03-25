@@ -1,20 +1,17 @@
-Write-Host "Inizio script"
+Write-Host "`nInizio script"
 
 # Trust repository PSGallery
-Write-Host "`nTrust repository PSGallery..." -NoNewline
+Write-Host "Trust repository PSGallery..."
 Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
-# Write-Host " OK" -ForegroundColor Green 
 
 # Installazione AzureAD
-Write-Host "`nInstallazione AzureAD..." -NoNewline
+Write-Host "Installazione AzureAD..."
 Install-Module AzureAD
-# Write-Host " OK" -ForegroundColor Green 
 
 # Connessione ad AzureAD
-Write-Host "`nConnessione ad AzureAD..." -NoNewline
+Write-Host "Connessione ad AzureAD..."
 $modAdminCred = Get-Credential
 Connect-AzureAD -Credential $modAdminCred
-# Write-Host " OK" -ForegroundColor Green 
 
 # Definizione del dominio
 $domainName = $modAdminCred.username -replace ".*@"
@@ -25,20 +22,18 @@ $hollyPasswordProfile.Password = "User.pw1"
 $hollyPasswordProfile.ForceChangePasswordNextLogin = $false
 
 # Creazione utente Holly Dickson
-Write-Host "`nCreazione utente Holly Dickson..." -NoNewline
+Write-Host "Creazione utente Holly Dickson..."
 New-AzureADUser -AccountEnabled $true -DisplayName "Holly Dickson" -GivenName "Holly" -Surname "Dickson" `
 -UserPrincipalName "Holly@$domainName" -PasswordProfile $hollyPasswordProfile -mailNickName "Holly" -UsageLocation "us" | Out-Null
-# Write-Host " OK" -ForegroundColor Green 
 
 # Assegnazione del ruolo Gloabl Admin ad Holly
-Write-Host "`nAssegnazione Global Admin ad Holly..." -NoNewline
+Write-Host "Assegnazione Global Admin ad Holly..."
 $globalAdminRoleObjectId = (Get-AzureADDirectoryRole | Where-Object {$_.DisplayName -eq "Global Administrator"}).ObjectId
 $hollyObjectId = (Get-AzureADUser -ObjectID "Holly@$domainName").ObjectId
 Add-AzureADDirectoryRoleMember -ObjectID $globalAdminRoleObjectId -RefObjectId $hollyObjectId
-# Write-Host " OK" -ForegroundColor Green 
 
 # Assegnazione delle licenze ad Holly
-Write-Host "`nAssegnazione delle licenze ad Holly..." -NoNewline
+Write-Host "Assegnazione delle licenze ad Holly..."
 $planNames= @("EMSPREMIUM","ENTERPRISEPREMIUM")
 foreach ($plan in $planNames) {
     $LicensesToAssign = New-Object -TypeName Microsoft.Open.AzureAD.Model.AssignedLicenses
@@ -47,8 +42,5 @@ foreach ($plan in $planNames) {
     $LicensesToAssign.AddLicenses = $License
     Set-AzureADUserLicense -ObjectId $hollyObjectId -AssignedLicenses $LicensesToAssign
 }
-# Write-Host " OK" -ForegroundColor Green
 
-
-
-Write-Host "`nFinito" -ForegroundColor Green
+Write-Host "`nFatto"
